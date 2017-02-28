@@ -12,7 +12,29 @@ static bool print(const char* data, size_t length) {
 	return true;
 }
 
-int printf(const char* restrict format, ...) {
+//thanks to r0nk for this one. https://github.com/r0nk/r0nix/commit/679221bdd5d5f8e9272654b263c692f71e0f1976
+
+void gethfromi(const int data, char* res){
+	int len = 8;
+	int shift = 0;
+	int mask = 0xf;
+	int temp;
+	res[8] = '\0';
+
+	while(len >= 0){
+		temp = (data & mask) >> shift;
+		if(temp >= 0 && temp <= 9){
+			res[len] = (char) (temp+ 0x30); //convert to ascii number
+		} else if(temp > 9){
+			res[len] = (char) (temp + 55); //convert to ascii char
+		}
+		shift += 4;	//this is actually
+		mask*=0x10; //really clever.
+		len--;
+	}
+}
+
+int printf(const char* __restrict__ format, ...) {
 	va_list parameters;
 	va_start(parameters, format);
 
@@ -59,6 +81,19 @@ int printf(const char* restrict format, ...) {
 				return -1;
 			}
 			if (!print(str, len))
+				return -1;
+			written += len;
+		} else if (*format == 'x') {
+			format++;
+			int number = va_arg(parameters, int);
+			char  str[] = "00000000";
+			gethfromi(number, str);
+			size_t len = strlen(str);
+			if (maxrem < len) {
+				// TODO: Set errno to EOVERFLOW.
+				return -1;
+			}
+			if(!print(str, len))
 				return -1;
 			written += len;
 		} else {

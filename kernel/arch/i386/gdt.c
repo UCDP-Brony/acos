@@ -1,5 +1,5 @@
 #include <kernel/gdt.h>
-
+#include <stdio.h>
 GlobalTableManager::GlobalTableManager(){
 	gptr.size = (256*8);
 	gptr.ptr = (uint32_t) gdt_table;

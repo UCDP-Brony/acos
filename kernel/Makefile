@@ -34,6 +34,7 @@ kernel/kernel.o \
 OBJS=\
 $(ARCHDIR)/crti.o \
 $(ARCHDIR)/crtbegin.o \
+$(ARCHDIR)/icxxabi.o \
 $(ARCHDIR)/reload_segments.o \
 $(ARCHDIR)/gdt.o \
 $(ARCHDIR)/port.o \
@@ -48,6 +49,7 @@ LINK_LIST=\
 $(LDFLAGS) \
 $(ARCHDIR)/crti.o \
 $(ARCHDIR)/crtbegin.o \
+$(ARCHDIR)/icxxabi.o \
 $(ARCHDIR)/reload_segments.o \
 $(ARCHDIR)/gdt.o \
 $(ARCHDIR)/port.o \

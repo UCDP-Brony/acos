@@ -274,7 +274,7 @@ void InterruptManager::setInterruptDescriptorTableEntry(
 	const uint8_t IDT_DESC_PRESENT = 0x80;
 
 	interruptDescriptorTable[interruptNumber].handlerAddressLowBits = ((uint32_t) handler) & 0xFFFF;
-	interruptDescriptorTable[interruptNumber].handlerAddressHighBits = (((uint32_t) handler) >> 16) & 0xFFFF;
+	interruptDescriptorTable[interruptNumber].handlerAddressHighBits = (((uint32_t) handler) << 16) & 0xFFFF;
 	interruptDescriptorTable[interruptNumber].gdt_codeSegmentSelector = codeSegmentSelectorOffset;
 	interruptDescriptorTable[interruptNumber].access = IDT_DESC_PRESENT | descriptorType | ((descriptorPrivilegeLevel & 3) << 5);
 	interruptDescriptorTable[interruptNumber].reserved = 0;
@@ -564,11 +564,15 @@ void InterruptManager::ackInt(uint32_t num){
 		pic.getSlaveCommand().write(0x20);
 	}
 	pic.getMasterCommand().write(0x20);
-
+	printf("nous sommes passés ici !\n");
 }
 
 uint32_t InterruptManager::handleInterrupt(uint32_t esp){
 	printf("INTERRUPT\n");
 	ackInt(esp);
 	return esp;
+}
+
+void InterruptManager::fire_int(){
+	asm("int $42");
 }

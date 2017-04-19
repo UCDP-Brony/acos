@@ -39,7 +39,7 @@ public:
 	
 	static uint32_t handleInterrupt(uint32_t esp);
 	static void ackInt(uint32_t num);
-
+	void fire_int();
 };
 
 #endif //INTERRUPTS_H
